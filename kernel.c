@@ -1,10 +1,17 @@
 #include "common.h"
-
+void klogo(void){
+  kputs("#########################################################\n");
+  kputs("#*         *                    ==========+ ===========+#\n");
+  kputs("# *       *  * * * *    * * * *           |            |#\n");
+  kputs("#  *     * *         * *                  |            |#\n");
+  kputs("#   *   *  *         *  * * * * ==========+ +==========+#\n");
+  kputs("#    * * = *         *         *          | |           #\n");
+  kputs("#RISC *      * * * *    * * * *           | |           #\n");
+  kputs("#                               ==========+ +===========#\n");
+  kputs("#########################################################\n");
+}
 void kmain(void) {
+    klogo();
     memset(__bss, 0, (size_t) __bss_end - (size_t) __bss);
-
-    kputs("Inicializando VOS32\n");
-    kputs("Ctrl-a h para ayuda en QEMU\n");
-
     for (;;);
 }

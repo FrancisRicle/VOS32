@@ -1,0 +1,11 @@
+#source ~/.config/gdb/.gdbinit
+define kernel_reload
+    make kernel
+    directory .
+    file kernel
+    monitor system_reset
+    continue
+    load
+    continue
+    echo \n--- Kernel cargado y PC reseteado ---\n
+end

@@ -7,10 +7,13 @@ Vamos a usar `Open SBI` como implementacion de la RISC-V Supervisor Binary Inter
 * `llvm`
 * `lld`
 * `clang`
+* `sdl`
 * `qemu-system-riscv32`
 * `curl`
-* `docker` (opcional, con docker las dependencias anterior no hacen falta)
+* `gdb`
+* `gdb-multiarch`
+* `docker` (opcional, con docker las dependencias anterior no hacen falta) TODAVIA NO ESTA LA IMAGEN LISTA
 
 ## Como usar
-- Con docker: `make docker_build` despues `make docker_run`
+- Con docker: `make docker_build` despues `make docker_run` TODO
 - Sin docker: `make qemu`

@@ -1,6 +1,9 @@
 .section .text
+.globl get_time
+get_time:
+  csrr a0, time
+  ret
 .globl kputc
-
 # kputc(char c) -> a0 contiene el caracter
 kputc:
     li a7, 1          # SBI console_putchar
