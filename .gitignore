@@ -5,3 +5,31 @@
 kernel
 *.log
 *.pcap
+## --- LaTeX ---
+*.aux
+*.fdb_latexmk
+*.fls
+*.gz
+*.log
+*.out
+*.pdf
+*.toc
+*.synctex.gz
+*.bbl
+*.blg
+*.thm
+*.nav
+*.snm
+*.vrb
+
+## --- Neovim / Editores ---
+*.swp
+*.swo
+.netrwhist
+undo/
+.vimspector.json
+
+## --- Directorios de salida (opcional) ---
+# Si configuras Vimtex para compilar en una carpeta aparte:
+# build/
+# out/
