@@ -39,19 +39,19 @@ void klog(log_level_t level, const char* msg){
   // 2. Imprimir el tag según el nivel
   switch (level) {
     case LOG_OK:
-      kputs(BOLD GREEN "  OK   " RESET);
+      kputs("  OK   ");
       break;
     case LOG_INFO:
-      kputs(BOLD BLUE "  INFO " RESET);
+      kputs("  INFO ");
       break;
     case LOG_WARN:
-      kputs(BOLD YELLOW "  WARN " RESET);
+      kputs("  WARN ");
       break;
     case LOG_ERROR:
-      kputs(BOLD RED " ERROR " RESET);
+      kputs(" ERROR ");
       break;
     case LOG_DEBUG:
-      kputs(BOLD MAGENTA " DEBUG " RESET);
+      kputs(" DEBUG ");
       break;
   }
 
