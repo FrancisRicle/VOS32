@@ -21,6 +21,7 @@ kernel
 *.nav
 *.snm
 *.vrb
+*.gdb_history
 
 ## --- Neovim / Editores ---
 *.swp
