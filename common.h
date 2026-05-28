@@ -21,6 +21,7 @@ typedef enum {
 void klog(log_level_t level, const char *msg);
 
 uint32_t get_time(void);
+void halt(void);
 void kputc(char c);
 void kputs(const char *s);
 void kputd(int v);

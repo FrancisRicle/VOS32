@@ -15,3 +15,7 @@ kputc:
 boot:
     la sp, __stack_top
     j kmain           # Saltamos al C
+.globl halt
+halt:
+  wfi
+  j halt

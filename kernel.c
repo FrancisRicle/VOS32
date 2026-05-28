@@ -13,5 +13,5 @@ void klogo(void){
 void kmain(void) {
     klogo();
     memset(__bss, 0, (size_t) __bss_end - (size_t) __bss);
-    for (;;);
+    halt();
 }

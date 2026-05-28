@@ -13,13 +13,14 @@ kernel: $(SRCS) kernel.ld
 	$(CC) $(CFLAGS) -Wl,-Tkernel.ld -Wl,-Map=kernel.map \
 		-o $@ $(SRCS)
 clean:
-	rm -rf kernel kernel.map $(QEMUPIDFILE)
+	rm -rf kernel kernel.map $(QEMUPIDFILE) *.out *.log *.toc *.aux
 qemu_debug: kernel
 	$(QEMU) $(QEMUFLAGS) -s -S -display sdl -daemonize -monitor none -pidfile $(QEMUPIDFILE)
-
 run: kernel
 	#$(QEMU) $(QEMUFLAGS) -nographic -serial mon:stdio --no-reboot
 	$(QEMU) $(QEMUFLAGS) -display sdl -monitor none --no-reboot
+report:
+	typst compile doc/informe.typ informe.pdf
 	
 debug: qemu_debug
 	gdb kernel -ex "target remote localhost:1234" -ex "set confirm off" -ex "monitor system_reset" -ex "source gdbconfig"
