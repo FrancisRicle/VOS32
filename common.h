@@ -18,6 +18,14 @@ typedef enum {
     LOG_DEBUG
 } log_level_t;
 
+typedef struct {
+    long error;
+    long value;
+} sbiret;
+
+sbiret sbi_call(long arg0, long arg1, long arg2, long arg3,
+                       long arg4, long arg5, long fid, long eid);
+
 void klog(log_level_t level, const char *msg);
 
 uint32_t get_time(void);

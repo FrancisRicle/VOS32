@@ -19,3 +19,7 @@ boot:
 halt:
   wfi
   j halt
+.global sbi_call
+sbi_call:
+    ecall
+    ret

@@ -17,7 +17,6 @@ clean:
 qemu_debug: kernel
 	$(QEMU) $(QEMUFLAGS) -s -S -display sdl -daemonize -monitor none -pidfile $(QEMUPIDFILE)
 run: kernel
-	#$(QEMU) $(QEMUFLAGS) -nographic -serial mon:stdio --no-reboot
 	$(QEMU) $(QEMUFLAGS) -display sdl -monitor none --no-reboot
 report:
 	typst compile doc/informe.typ informe.pdf
