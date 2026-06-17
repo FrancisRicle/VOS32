@@ -26,6 +26,16 @@ get_sepc:
   csrr a0, sepc
   ret
 
+.globl init_int
+init_int:
+  csrsi sstatus, 2
+  ret
+
+.globl init_timer
+init_timer:
+  li t0, 32
+  csrs sie, t0
+  ret
 
 .global sbi_call
 sbi_call:

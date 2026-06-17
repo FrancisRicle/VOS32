@@ -30,6 +30,8 @@ void kputd(int v);
 void kputh(uint32_t v); // Imprime un número en formato 0xABC12345
 void *memset(void *buf, char c, size_t n);
 void init_traps(void);
+void init_int(void);
+void init_timer(void);
 paddr_t knext_free_page(void);
 paddr_t kn_free_pages(uint32_t n);
 extern char __bss[], __bss_end[], __stack_top[];
@@ -68,7 +70,7 @@ struct trap_frame {
 } __attribute__((packed));
 #define PANIC(fmt)\                                                 
     do {\                                                                  
-      kputs("KERNEL PANIC on file: ");\
+      kputs("\nKERNEL PANIC on file: ");\
       kputs(__FILE__);\
       kputs(" on line: ");\
       kputd(__LINE__);\

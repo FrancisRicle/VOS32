@@ -4,7 +4,7 @@ QEMUPIDFILE = ./qemu.pid
 CC = clang
 CFLAGS = -std=c11 -O2 -g3 -Wall -Wextra --target=riscv32-unknown-elf \
 				 -fuse-ld=lld -fno-stack-protector -ffreestanding -nostdlib
-SRCS = kernel/kernel.c kernel/kernel.S traps/traps.S lib/libc.c mmu/mmu.c
+SRCS = kernel/kernel.c kernel/kernel.S traps/traps.S lib/libc.c mmu/mmu.c scheduler/scheduler.c scheduler/scheduler.S
 kernel-bin: $(SRCS) kernel/kernel.ld
 	$(CC) $(CFLAGS) -Wl,-Tkernel/kernel.ld -Wl,-Map=kernel.map \
 		-o $@ $(SRCS)
