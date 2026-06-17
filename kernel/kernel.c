@@ -26,5 +26,14 @@ void kmain(void) {
     klogo();
     memset(__bss, 0, (size_t) __bss_end - (size_t) __bss);
     init_traps();
+    // TESTING DE MEMORIA
+    paddr_t paddr01 = knext_free_page();
+    paddr_t paddr02 = kn_free_pages(10);
+    kputs("Hay memoria ^w^\n");
+    kputs("Primer direccion:\n");
+    kputh(paddr01);
+    kputs("\nSegunda direccion:\n");
+    kputh(paddr02);
+    paddr_t demasiada_mem = kn_free_pages(16384);
     halt();
 }

@@ -9,6 +9,7 @@ typedef uint32_t vaddr_t;
 #define true  1
 #define false 0
 #define NULL  ((void *) 0)
+#define PAGE_SIZE 4096
 
 typedef struct {
     long error;
@@ -29,6 +30,8 @@ void kputd(int v);
 void kputh(uint32_t v); // Imprime un número en formato 0xABC12345
 void *memset(void *buf, char c, size_t n);
 void init_traps(void);
+paddr_t knext_free_page(void);
+paddr_t kn_free_pages(uint32_t n);
 extern char __bss[], __bss_end[], __stack_top[];
 struct trap_frame {
     uint32_t ra;
