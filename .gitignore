@@ -2,7 +2,7 @@
 !/disk/.gitkeep
 *.map
 *.o
-kernel
+kernel-bin
 *.log
 *.pcap
 ## --- LaTeX ---
