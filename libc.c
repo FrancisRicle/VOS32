@@ -1,8 +1,11 @@
 #include "common.h"
 
+void kputc(char c){
+  sbi_call(c, 0, 0, 0, 0, 0, 0, 1);
+}
 void kputs(const char *s) {
     while (*s) {
-        kputc(*s++);
+      kputc(*s++);
     }
 }
 void kputd(int v) {
@@ -30,34 +33,6 @@ void kputh(uint32_t v) {
         uint32_t nibble = (v >> i) & 0xF;
         kputc(hex_digits[nibble]);
     }
-}
-
-void klog(log_level_t level, const char* msg){
-  kputs("[ ");
-  kputd(get_time());
-  kputs(" ]");
-  // 2. Imprimir el tag según el nivel
-  switch (level) {
-    case LOG_OK:
-      kputs("  OK   ");
-      break;
-    case LOG_INFO:
-      kputs("  INFO ");
-      break;
-    case LOG_WARN:
-      kputs("  WARN ");
-      break;
-    case LOG_ERROR:
-      kputs(" ERROR ");
-      break;
-    case LOG_DEBUG:
-      kputs(" DEBUG ");
-      break;
-  }
-
-  kputs(": ");
-  kputs(msg);
-  kputs("\n");
 }
 
 void *memset(void *buf, char c, size_t n) {

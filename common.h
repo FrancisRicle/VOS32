@@ -10,14 +10,6 @@ typedef uint32_t vaddr_t;
 #define false 0
 #define NULL  ((void *) 0)
 
-typedef enum {
-    LOG_INFO,
-    LOG_OK,
-    LOG_WARN,
-    LOG_ERROR,
-    LOG_DEBUG
-} log_level_t;
-
 typedef struct {
     long error;
     long value;
@@ -26,14 +18,58 @@ typedef struct {
 sbiret sbi_call(long arg0, long arg1, long arg2, long arg3,
                        long arg4, long arg5, long fid, long eid);
 
-void klog(log_level_t level, const char *msg);
-
 uint32_t get_time(void);
+uint32_t get_scause(void);
+uint32_t get_stval(void);
+uint32_t get_sepc(void);
 void halt(void);
 void kputc(char c);
 void kputs(const char *s);
 void kputd(int v);
 void kputh(uint32_t v); // Imprime un número en formato 0xABC12345
 void *memset(void *buf, char c, size_t n);
-
+void init_traps(void);
 extern char __bss[], __bss_end[], __stack_top[];
+struct trap_frame {
+    uint32_t ra;
+    uint32_t gp;
+    uint32_t tp;
+    uint32_t t0;
+    uint32_t t1;
+    uint32_t t2;
+    uint32_t t3;
+    uint32_t t4;
+    uint32_t t5;
+    uint32_t t6;
+    uint32_t a0;
+    uint32_t a1;
+    uint32_t a2;
+    uint32_t a3;
+    uint32_t a4;
+    uint32_t a5;
+    uint32_t a6;
+    uint32_t a7;
+    uint32_t s0;
+    uint32_t s1;
+    uint32_t s2;
+    uint32_t s3;
+    uint32_t s4;
+    uint32_t s5;
+    uint32_t s6;
+    uint32_t s7;
+    uint32_t s8;
+    uint32_t s9;
+    uint32_t s10;
+    uint32_t s11;
+    uint32_t sp;
+} __attribute__((packed));
+#define PANIC(fmt)\                                                 
+    do {\                                                                  
+        kputs("KERNEL PANIC on file: ");\
+        kputs(__FILE__);\
+        kputs(" on line: ");\
+        kputd(__LINE__);\
+        kputs(" panic: ");\
+        kputs(fmt);\
+        while (1) {}\                                                          
+    } while (0)

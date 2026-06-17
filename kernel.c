@@ -10,8 +10,21 @@ void klogo(void){
   kputs("#                               ==========+ +===========#\n");
   kputs("#########################################################\n");
 }
+void handle_trap(struct trap_frame *f) {
+    uint32_t scause = get_scause();
+    uint32_t stval = get_stval();
+    uint32_t user_pc = get_sepc();
+    kputs("unexpected trap scause=");
+    kputd(scause);
+    kputs(" stval=");
+    kputd(stval);
+    kputs(" user_pc=");
+    kputd(user_pc);
+    PANIC("PANIC");
+}
 void kmain(void) {
     klogo();
     memset(__bss, 0, (size_t) __bss_end - (size_t) __bss);
+    init_traps();
     halt();
 }
