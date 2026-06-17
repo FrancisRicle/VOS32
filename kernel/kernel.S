@@ -34,7 +34,6 @@ sbi_call:
 
 .globl halt
 halt:
-  unimp
   wfi
   j halt
 
