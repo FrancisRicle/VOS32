@@ -35,6 +35,8 @@ sbi_call:
 .globl halt
 halt:
   unimp
+  # Wait For Interrupt
+  # Deja durmiendo al procesador hasta que recibe una interrupcion
   wfi
   j halt
 
