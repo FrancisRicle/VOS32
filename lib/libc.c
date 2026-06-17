@@ -1,4 +1,4 @@
-#include "common.h"
+#include "../include/common.h"
 
 void kputc(char c){
   sbi_call(c, 0, 0, 0, 0, 0, 0, 1);

@@ -1,8 +1,8 @@
 #source ~/.config/gdb/.gdbinit
 define kernel_reload
-    make kernel
+    make kernel-bin
     directory .
-    file kernel
+    file kernel-bin
     monitor system_reset
     continue
     load

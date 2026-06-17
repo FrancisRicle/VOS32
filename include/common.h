@@ -65,11 +65,11 @@ struct trap_frame {
 } __attribute__((packed));
 #define PANIC(fmt)\                                                 
     do {\                                                                  
-        kputs("KERNEL PANIC on file: ");\
-        kputs(__FILE__);\
-        kputs(" on line: ");\
-        kputd(__LINE__);\
-        kputs(" panic: ");\
-        kputs(fmt);\
+      kputs("KERNEL PANIC on file: ");\
+      kputs(__FILE__);\
+      kputs(" on line: ");\
+      kputd(__LINE__);\
+      kputs(" panic: ");\
+      kputs(fmt);\
         while (1) {}\                                                          
     } while (0)

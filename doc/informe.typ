@@ -62,7 +62,7 @@ y usamos la instrucción KEEP para decirle al compilador que el .text.boot no es
 Por último saltamos los primeros 128 kb, reservados para el stack del kernel.\
 = Hello world!
 El kernel arranca en la dirección definida en los pasos de arriba,
-en este caso es la tag ‘boot’ del archivo supervisor.S,
+en este caso es la tag ‘boot’ del archivo kernel.S,
 donde se define el stack pointer en la dirección dada por kernel.ld,
 luego se salta a kmain en kernel.c.
 Para escribir en pantalla se usa kputs de libc.c, que por cada carácter llama a kputc,
@@ -72,6 +72,10 @@ En este caso lo configuramos así para tener por un lado en la terminal gdb corr
 y por otro tener el display de lo que sucede en el kernel.
 Otra manera hubiese sido que QEMU mande la salida del UART directamente al stout.\ \
 Luego de imprimir en pantalla la función halt espera por interrupciones y sino hace un loop infinito.
+= Macros
+== Panic
+= Excepciones
+= Memoria
 
 
 
