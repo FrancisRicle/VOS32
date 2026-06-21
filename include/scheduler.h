@@ -1,17 +1,12 @@
-#include "common.h"
+#include "traps.h"
+#define TIMER_FREQ_HZ 10000000UL
 
-#define PROCS_MAX 8
+#define TICK_INTERVAL (TIMER_FREQ_HZ / 2) // 500ms
 
-#define PROC_UNUSED 0   // Proceso (PCB) sin usar
-#define PROC_RUNNABLE 1 // Proceso (PCB) en uso
-
-void switch_context(uint32_t *prev_sp, uint32_t *next_sp);
-
-typedef struct {
-    int pid;    
-    int state;      // Estado UNUSED o RUNNABLE
-    vaddr_t sp;     // Stack pointer
-    uint8_t stack[8192];    // Stack del kernel
-} process;
-
-process *create_process(uint32_t pc);
+uint64_t current_time(void);
+void timer(void);
+void schedule(void);
+void scheduler(void);
+void yield(uint32_t pc, trap_frame_t *tf);
+void yield_a(uint32_t pc);
+void switch_context(trap_frame_t *curr_tf, trap_frame_t *next_tf);

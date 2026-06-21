@@ -1,13 +1,6 @@
-.section .text
-
-.global init_traps
-init_traps:
-  la t0, kernel_entry
-  csrw stvec, t0
-  ret
-
-.global kernel_entry 
-kernel_entry:
+.section .text.traps_entry
+.globl traps_entry 
+traps_entry:
   csrw sscratch, sp // guardamos temporalmente el stack pointer al momento de la excepcion
   addi sp, sp, -4 * 31 // guardamos espacio para el trap_frame
   sw ra,  4 * 0(sp)
@@ -45,7 +38,7 @@ kernel_entry:
   sw a0, 4 * 30(sp) //
 
   mv a0, sp
-  call handle_trap
+  call traps_handler
 
   lw ra,  4 * 0(sp)
   lw gp,  4 * 1(sp)
@@ -79,3 +72,33 @@ kernel_entry:
   lw s11, 4 * 29(sp)
   lw sp,  4 * 30(sp)
   sret
+
+.section .text
+
+.globl exception_cause
+exception_cause:
+  csrr a0, scause
+  ret
+
+.globl exception_value
+exception_value:
+  csrr a0, stval
+  ret
+
+.globl exception_pc
+exception_pc:
+  csrr a0, sepc
+  ret
+
+.globl interrupts
+interrupts:
+  csrsi sstatus, 2
+  ret
+
+
+
+.globl traps
+traps:
+  la t0, traps_entry
+  csrw stvec, t0
+  ret

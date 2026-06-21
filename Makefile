@@ -1,15 +1,20 @@
+PWD = $(shell pwd)
+INCLUDE = $(PWD)/include
 QEMU = qemu-system-riscv32
 QEMUFLAGS = -machine virt -bios ./opensbi.bin -kernel kernel-bin
 QEMUPIDFILE = ./qemu.pid
 CC = clang
-CFLAGS = -std=c11 -O2 -g3 -Wall -Wextra --target=riscv32-unknown-elf \
-				 -fuse-ld=lld -fno-stack-protector -ffreestanding -nostdlib
-SRCS = kernel/kernel.c kernel/kernel.S traps/traps.S lib/libc.c mmu/mmu.c scheduler/scheduler.c scheduler/scheduler.S
-kernel-bin: $(SRCS) kernel/kernel.ld
-	$(CC) $(CFLAGS) -Wl,-Tkernel/kernel.ld -Wl,-Map=kernel.map \
+CFLAGS = -std=c11 -O0 -g3 -Wall -Wextra --target=riscv32-unknown-elf \
+				 -fuse-ld=lld -fno-stack-protector -ffreestanding -nostdlib \
+				 -I $(INCLUDE)
+CSRC = $(shell find src -name "*.c")
+SSRC = $(shell find src -name "*.S")
+SRCS = $(CSRC) $(SSRC)
+kernel-bin: $(SRCS) src/kernel/kernel.ld
+	$(CC) $(CFLAGS) -Wl,-Tsrc/kernel/kernel.ld -Wl,-Map=kernel.map \
 		-o $@ $(SRCS)
 clean:
-	rm -rf kernel/kernel kernel.map $(QEMUPIDFILE)
+	rm -rf kernel-bin kernel.map
 qemu_debug: kernel-bin
 	$(QEMU) $(QEMUFLAGS) -s -S -display sdl -daemonize -monitor none -pidfile $(QEMUPIDFILE)
 run: kernel-bin

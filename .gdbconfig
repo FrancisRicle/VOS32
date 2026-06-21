@@ -1,4 +1,3 @@
-#source ~/.config/gdb/.gdbinit
 define kernel_reload
     make kernel-bin
     directory .
