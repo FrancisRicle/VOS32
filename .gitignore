@@ -22,6 +22,7 @@ kernel-bin
 *.snm
 *.vrb
 *.gdb_history
+*.cache
 
 ## --- Neovim / Editores ---
 *.swp
