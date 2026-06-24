@@ -28,5 +28,17 @@ void yield(uint32_t pc, trap_frame_t *tf) {
   memcpy(tf, &next->tf, sizeof(trap_frame_t));
   next->state = PROC_RUNNING;
   curr_proc = next;
+
+  __asm__ __volatile__(
+        "sfence.vma\n"
+        "csrw satp, %[satp]\n"
+        "sfence.vma\n"
+        "csrw sscratch, %[sscratch]\n"
+        :
+        // Don't forget the trailing comma!
+        : [satp] "r" (SATP_SV32 | ((uint32_t) next->page_table / PAGE_SIZE)),
+          [sscratch] "r" ((uint32_t) &next->stack[sizeof(next->stack)])
+    );
+  
   yield_a(next->sepc);
 }

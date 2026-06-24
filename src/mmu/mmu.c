@@ -39,3 +39,20 @@ paddr_t knpages(uint32_t n) {
   }
   return paddr;
 }
+
+void map_page(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
+    if (!is_aligned(vaddr, PAGE_SIZE))
+        panic("Virtual ADDR no esta alineada");
+    if (!is_aligned(paddr, PAGE_SIZE))
+        panic("Physical ADDR no esta alineada");
+
+    uint32_t vpn1 = vpn1_index(vaddr);// posicion en la tabla de tablas
+    if ((table1[vpn1] & PAGE_V)) {
+      uint32_t pt_addr = kpage(); // da espacio a la tabla de paginas, devuelve su direccion
+      table1[vpn1] = ((pt_addr / PAGE_SIZE) << 10 | PAGE_V);
+    }
+
+    uint32_t vpn0 = vpn0_index(vaddr);
+    uint32_t *table0 = (uint32_t*) ((table1[vpn1] >> 10) * PAGE_SIZE);
+    table0[vpn0] = ((paddr / PAGE_SIZE) << 10) | flags | PAGE_V;
+}

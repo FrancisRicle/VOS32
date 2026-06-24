@@ -15,6 +15,7 @@ typedef struct {
   uint8_t pid;
   process_state_e state;
   uint32_t sepc;
+  uint32_t *page_table;
   uint8_t stack[4096];
   trap_frame_t tf;
 } process_t;
