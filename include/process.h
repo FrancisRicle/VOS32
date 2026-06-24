@@ -21,7 +21,7 @@ typedef struct {
 
 void init_procs(void);
 void run_procs(void);
-void exec(uint32_t sepc, uint32_t *stack);
+void exec(uint32_t sepc, uint32_t stack);
 void create_process(uint32_t pc);
 
 extern process_t *curr_proc;

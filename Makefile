@@ -23,5 +23,11 @@ report:
 	typst compile doc/informe.typ doc/informe.pdf
 	
 debug: qemu_debug
-	gdb kernel-bin -ex "target remote localhost:1234" -ex "set confirm off" -ex "monitor system_reset" -ex "c" -ex "source .gdbconfig"
+	gdb kernel-bin \
+	-ex "target remote localhost:1234" \
+	-ex "set confirm off" \
+	-ex "monitor system_reset" \
+	-ex "b kmain" \
+	-ex "c" \
+	-ex "source .gdbconfig"
 

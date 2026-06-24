@@ -13,7 +13,7 @@ uint32_t exception_cause(void);
 uint32_t exception_value(void);
 uint32_t exception_pc(void);
 
-typedef struct {
+typedef struct __attribute__((packed)) {
   uint32_t ra;
   uint32_t gp;
   uint32_t tp;
@@ -36,6 +36,9 @@ typedef struct {
   uint32_t s1;
   uint32_t s2;
   uint32_t s3;
+  uint32_t s4;
+  uint32_t s5;
+  uint32_t s6;
   uint32_t s7;
   uint32_t s8;
   uint32_t s9;
@@ -43,6 +46,7 @@ typedef struct {
   uint32_t s11;
   uint32_t sp;
 } trap_frame_t;
+_Static_assert(sizeof(trap_frame_t) == 31 * 4, "trap_frame_t tiene padding");
 
 void interrupts(void);
 void traps(void);

@@ -25,7 +25,8 @@ void create_process(uint32_t pc) {
   procs[p].state = PROC_RUNNABLE;
   memset(&procs[p].tf, 0x0, sizeof(trap_frame_t));
   memset(&procs[p].stack, 0x0, sizeof(procs[p].stack));
-  procs[p].tf.sp = (uint32_t)&procs[p].stack[sizeof(procs[p].stack) - 1];
+  procs[p].tf.sp = (uint32_t)(procs[p].stack + sizeof(procs[p].stack));
+  procs[p].tf.ra = pc;
 }
 void run_procs() {
   uint8_t p = 0;
@@ -34,5 +35,5 @@ void run_procs() {
   }
   curr_proc = &procs[p];
   curr_proc->state = PROC_RUNNING;
-  exec(curr_proc->sepc, &procs[p].tf.sp);
+  exec(curr_proc->sepc, procs[p].tf.sp);
 }
