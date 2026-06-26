@@ -5,7 +5,6 @@
 #define OP_MS 10000UL // per ms
 
 #define TICK_INTERVAL_MS(X) ((X) * OP_MS)
-#define TICK_INTERVAL (TICK_INTERVAL / 2)
 
 uint64_t current_time(void);
 void timer(void);
