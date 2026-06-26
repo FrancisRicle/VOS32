@@ -29,11 +29,9 @@ void create_process(uint32_t pc) {
   memset(&procs[p].stack, 0x0, sizeof(procs[p].stack));
   procs[p].tf.sp = (uint32_t)(procs[p].stack + sizeof(procs[p].stack));
   procs[p].tf.ra = pc;
-  uint32_t *page_table = (uint32_t *) kpage();
-  for (paddr_t paddr = (paddr_t) __kernel_base; paddr < (paddr_t) __free_ram_end; paddr += PAGE_SIZE) {
-    map_page(page_table, paddr, paddr, PAGE_R | PAGE_W | PAGE_X);
-  }
-  procs[p].page_table = page_table;
+  procs[p].page_table = (uint32_t *)kpage();
+  map_mega(procs[p].page_table, 0x80000000, 0x80000000,
+           PAGE_R | PAGE_W | PAGE_X);
 }
 void run_procs() {
   uint8_t p = 0;

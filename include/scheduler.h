@@ -12,5 +12,5 @@ void timer(void);
 void schedule(void);
 void scheduler(void);
 void yield(uint32_t pc, trap_frame_t *tf);
-void yield_a(uint32_t pc);
+void return_next_task(uint32_t pc);
 void switch_context(trap_frame_t *curr_tf, trap_frame_t *next_tf);

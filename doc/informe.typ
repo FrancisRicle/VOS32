@@ -6,16 +6,23 @@
   materia: "Arquitectura y organización del computador",
   grupo: none,
   integrantes: (
-    ("Aurora Velasco", "123/20", "r1"),
-    ("Francis Ricle", "456/20", "r2"),
-    ("Mauro Dominguez", "789/20", "r3"),
+    ("Aurora Velasco", "123/20", "velascocata24@gmail.com"),
+    ("Francis Ricle", "456/20", "francisricleruiz@gmail.com"),
+    ("Mauro Dominguez", "789/20", "maurod200304@gmail.com"),
   ),
 )
 #outline(title: [Índice], indent: auto)
 #set outline.entry(fill: repeat([ ]))
 #pagebreak()
 = Introducción
-La idea de este trabajo es desarrollar un micro kernel para la arquitectura RISC-V de 32 bits, usando de referencia el micro kernel x86 implementado en la cursada de AyOC y comparando diferencias si las hubiere. Buscamos poder implementar un sistema de interrupciones acorde a la arquitectura RISC-V, paginación de memoria, scheduler multitarea, filesystem, además de programas de usuario para probar y un entorno visual con ventanas y manejo de escritorio simple. \
+== Abstract
+La idea de este trabajo es desarrollar un micro kernel para la arquitectura RISC-V de 32 bits,
+usando de referencia el micro kernel x86 implementado en la cursada de AyOC y el port de UNIX v6 para RISC-V "xv6".
+Buscamos poder implementar un sistema de interrupciones acorde a la arquitectura RISC-V, paginación de memoria,
+scheduler multitarea, filesystem,
+además de programas de usuario para probar y un entorno visual con ventanas y manejo de escritorio simple. \
+== Recursos
+=== QEMU
 Para la virtualización usamos el modelo de placa ‘virt’ Generic Virtual Plataform, que no emula un procesador de hardware real,
 sino que está pensado para usarse en máquinas virtuales sin las limitaciones específicas que cada productor puede establecer en sus modelos.
 Decidimos usar la versión genérica porque nos gustaría que este sistema se pueda adaptar a cualquier hardware más fácilmente. \
@@ -30,13 +37,15 @@ virt supports PCI, virtio, recent CPUs and large amounts of RAM. It also support
 - 8 virtio-mmio transport devices
 - 1 generic PCIe host bridge
 - The fw_cfg device that allows a guest to obtain data from QEMU
+=== Clang/LLVM toolkit
 Para compilación usamos Clang y LLVM, LLD para linkear, porque estas herramientas están mejor optimizadas para compilar en RISC-V.\ \
 Para bootear usamos la dirección de arranque especificada por RISC-V al no estar emulando el hardware de un fabricante específico.\ \
 En principio, el mapa de memoria no está definido, pero en la primer parte vamos a usar la UART y luego vamos a extener
 el kernel para que sea compatible con un teclado y pantalla emulados a través de virtio.\ \
 Tomamos la decisión de escribir todo el código que podamos en C y lo que debe ser escrito en assembler hacerlo en un archivo aparte y
 no hacer inline assembler porque nos parece más legible.\ \
-= Makefile
+=== OpenSBI
+=== Makefile
 En el makefile hicimos las siguientes reglas:
 - debug. Es la regla principal que usamos, esta lanza qemu en background y gdb ademas de conectarse a qemu para debuggear
 - run. Esta regla lanza solo qemu sin gdb.

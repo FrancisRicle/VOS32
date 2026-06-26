@@ -10,19 +10,21 @@
 
 #define SATP_SV32 (1u << 31) // bit que habilita paginacion en registro satp
 // FLags de las paginas de memoria
-#define PAGE_V    (1 << 0)   // Valid
-#define PAGE_R    (1 << 1)   // Read
-#define PAGE_W    (1 << 2)   // Write
-#define PAGE_X    (1 << 3)   // Execute
-#define PAGE_U    (1 << 4)   // User
-
+#define PAGE_V (1 << 0) // Valid
+#define PAGE_R (1 << 1) // Read
+#define PAGE_W (1 << 2) // Write
+#define PAGE_X (1 << 3) // Execute
+#define PAGE_U (1 << 4) // User
 
 extern char __free_ram[], __free_ram_end[];
 typedef uint32_t paddr_t;
 typedef uint32_t vaddr_t;
+extern uint32_t *kernel_table;
+void map_mega(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags);
+void init_kernel_table(void);
 void *memset(void *buf, char c, uint32_t n);
 void *memcpy(void *dst, const void *src, uint32_t n);
 void map_page(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags);
+void enable_mmu(uint32_t *table);
 paddr_t kpage(void);
 paddr_t knpage(uint32_t n);
-

@@ -19,7 +19,7 @@ timer:
   csrw sie, t0
   ret
 
-.globl yield_a
-yield_a:
+.globl return_next_task
+return_next_task:
   csrw sepc, a0
   ret

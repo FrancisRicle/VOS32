@@ -1,4 +1,5 @@
 #include "console.h"
+#include "mmu.h"
 #include "process.h"
 #include "scheduler.h"
 #include "traps.h"
@@ -9,7 +10,6 @@ void proc_a_entry(void) {
   puts("\nstarting process A\n");
   while (1) {
     puts("A");
-    puts("C");
   }
 }
 
@@ -37,9 +37,11 @@ void kmain(void) {
   traps();      // seteamos el trap_handler
   scheduler();  // habilitamos el timer
   interrupts(); // habilitamos interrupciones
+  init_kernel_table();
   init_procs();
   create_process((uint32_t)proc_a_entry);
   create_process((uint32_t)proc_b_entry);
+  enable_mmu(kernel_table);
   run_procs();
   halt();
 }
