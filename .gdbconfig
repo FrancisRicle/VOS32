@@ -8,6 +8,9 @@ define kernel_reload
     continue
     echo \n--- Kernel cargado y PC reseteado ---\n
 end
+define pages
+  monitor info mem
+end
 define kernel_exit
   monitor quit
   quit
