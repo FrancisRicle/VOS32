@@ -23,6 +23,7 @@ kernel-bin
 *.vrb
 *.gdb_history
 *.cache
+*.odt#
 
 ## --- Neovim / Editores ---
 *.swp
