@@ -6,7 +6,7 @@
 
 void schedule() {
   uint64_t now = current_time();
-  sbi_set_timer(now + TICK_INTERVAL_MS(5000));
+  sbi_set_timer(now + TICK_INTERVAL_MS(500));
 }
 
 void scheduler() {
