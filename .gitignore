@@ -12,7 +12,7 @@ kernel-bin
 *.gz
 *.log
 *.out
-*.pdf
+*.tmp
 *.toc
 *.synctex.gz
 *.bbl
