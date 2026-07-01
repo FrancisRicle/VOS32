@@ -1,7 +1,7 @@
 PWD = $(shell pwd)
 INCLUDE = $(PWD)/include
 QEMU = qemu-system-riscv32
-QEMUFLAGS = -machine virt -bios ./opensbi.bin -kernel kernel-bin
+QEMUFLAGS = -machine virt -bios default -kernel kernel-bin
 QEMUPIDFILE = ./qemu.pid
 CC = clang
 CFLAGS = -std=c11 -O0 -g3 -Wall -Wextra --target=riscv32-unknown-elf \
