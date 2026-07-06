@@ -1,5 +1,6 @@
 #include "mmu.h"
 #include "panic.h"
+#include <stdint.h>
 uint32_t *kernel_table;
 
 void *memset(void *buf, char c, uint32_t n) {
@@ -17,31 +18,26 @@ void *memcpy(void *dst, const void *src, uint32_t n) {
   return dst;
 }
 
-paddr_t kpage() {
-  static paddr_t next_paddr = (paddr_t)__free_ram;
+paddr_t nphypages(uint32_t n) {
+  if (n <= 0) {
+    panic("MAMA; ME ESTAN PIDIENDO MEMORIA NEGATIVA!!");
+  }
+  static paddr_t next_paddr = 0;
+  if (next_paddr == 0)
+    next_paddr = (paddr_t)&__free_ram;
   paddr_t paddr = next_paddr;
-  next_paddr += PAGE_SIZE;
+  next_paddr += n * PAGE_SIZE;
 
   if (next_paddr > (paddr_t)__free_ram_end) {
     panic("Esta cara la memoria >.<");
   }
 
-  memset((void *)paddr, 0, PAGE_SIZE);
+  memset((void *)paddr, 0, n * PAGE_SIZE);
   return paddr;
 }
+paddr_t phypage() { return nphypages(1); }
 
-paddr_t knpages(uint32_t n) {
-  if (n <= 0) {
-    panic("MAMA; ME ESTAN PIDIENDO MEMORIA NEGATIVA!!");
-  }
-  paddr_t paddr = kpage();
-  for (uint32_t i = 1; i < n; i++) {
-    kpage();
-  }
-  return paddr;
-}
-
-void map_page(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
+void mappage(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
   if (!is_aligned(vaddr, PAGE_SIZE))
     panic("Virtual ADDR no esta alineada");
   if (!is_aligned(paddr, PAGE_SIZE))
@@ -49,7 +45,7 @@ void map_page(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
 
   uint32_t vpn1 = vpn1_index(vaddr); // posicion en la tabla de tablas
   if (!(table1[vpn1] & PAGE_V)) {    // si no hay sig nivel lo creamos
-    uint32_t pt_addr = kpage();
+    uint32_t pt_addr = phypage();
     table1[vpn1] = ((pt_addr / PAGE_SIZE) << 10 | PAGE_V);
   }
 
@@ -58,7 +54,7 @@ void map_page(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
   table0[vpn0] = ((paddr / PAGE_SIZE) << 10) | flags | PAGE_V;
 }
 
-void map_mega(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
+void mapmega(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
   if (!is_aligned(vaddr, PAGE_SIZE * 1024))
     panic("vaddr no alineada a megapage");
   if (!is_aligned(paddr, PAGE_SIZE * 1024))
@@ -67,7 +63,11 @@ void map_mega(uint32_t *table1, uint32_t vaddr, paddr_t paddr, uint32_t flags) {
   table1[vpn1] = ((paddr / PAGE_SIZE) << 10) | flags | PAGE_V;
 }
 
-void init_kernel_table(void) {
-  kernel_table = (uint32_t *)kpage();
-  map_mega(kernel_table, 0x80000000, 0x80000000, PAGE_R | PAGE_W | PAGE_X);
+void kmap(uint32_t *pt) {
+  mapmega(pt, 0x80000000, 0x80000000, PAGE_R | PAGE_W | PAGE_X);
+}
+
+void kinitpt(void) {
+  kernel_table = (uint32_t *)phypage();
+  kmap(kernel_table);
 }
