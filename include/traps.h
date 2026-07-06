@@ -8,6 +8,9 @@
 #define TIMER_INTERRUPT 5
 #define EXTERNAL_INTERRUPT 9
 #define SOFTWARE_INTERRUPT 1
+#define LOAD_PAGE_FAULT_EXP 13
+#define INSTRUCTION_PAGE_FAULT_EXP 12
+#define STORE_PAGE_FAULT_EXP 15
 
 uint32_t exception_cause(void);
 uint32_t exception_value(void);
@@ -49,7 +52,7 @@ typedef struct __attribute__((packed)) {
 _Static_assert(sizeof(trap_frame_t) == 31 * 4, "trap_frame_t tiene padding");
 
 void interrupts(void);
+void uinterrupts(void);
 void traps(void);
-void exceptions_handler(uint32_t scause, uint32_t pc, trap_frame_t *tf,
-                        uint32_t stval);
-void interrupts_handler(uint32_t pc, uint32_t scause, trap_frame_t *tf);
+void exceptions_handler(uint32_t scause, trap_frame_t *tf);
+void interrupts_handler(uint32_t scause, trap_frame_t *tf);
