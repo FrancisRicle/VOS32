@@ -1,8 +1,7 @@
 #include "traps.h"
-#include <stdint.h>
 
-#define PROCS_MAX 2
-#define PROCS_BASE 0x80000200
+#define PROCS_MAX 4
+#define PROCS_BASE 0x1000000
 
 typedef enum {
   PROC_NULL,
@@ -14,16 +13,14 @@ typedef enum {
 typedef struct {
   uint8_t pid;
   process_state_e state;
-  uint32_t sepc;
-  uint32_t *page_table;
-  uint8_t stack[4096];
+  uint32_t epc;
+  uint32_t *table1;
   trap_frame_t tf;
 } process_t;
 
-void init_procs(void);
-void run_procs(void);
-void exec(uint32_t sepc, uint32_t stack);
-void create_process(uint32_t pc);
+void pinit(void);
+void uinit(void);
+void create_process(const void *image, uint32_t image_size);
 
-extern process_t *curr_proc;
-extern process_t procs[2];
+extern uint32_t currpid;
+extern process_t procs[PROCS_MAX];
