@@ -1,6 +1,5 @@
 #include "scheduler.h"
 #include "mmu.h"
-#include "process.h"
 #include "sbi.h"
 #include "traps.h"
 
@@ -14,19 +13,20 @@ void scheduler() {
   timer();
 }
 
-void yield(uint32_t pc, trap_frame_t *tf) {
-  curr_proc->sepc = pc;
-  memcpy(&curr_proc->tf, tf, sizeof(trap_frame_t));
-  curr_proc->state = PROC_RUNNABLE;
-  process_t *next = 0x0;
-  for (uint8_t p = 0; p < PROCS_MAX; p++) {
-    if (&procs[p] != curr_proc && procs[p].state == PROC_RUNNABLE) {
-      next = &procs[p];
-      break;
-    }
-  }
-  memcpy(tf, &next->tf, sizeof(trap_frame_t));
-  next->state = PROC_RUNNING;
-  curr_proc = next;
-  return_next_task(next->sepc);
+uint32_t nextproc(uint32_t exclude) {
+  uint32_t next = exclude;
+  do {
+    next++;
+    if (next == PROCS_MAX)
+      next = 0;
+  } while (procs[next].state != PROC_RUNNABLE);
+  return next;
+}
+
+void savecurrproc(uint32_t currpc, trap_frame_t *currtf) {
+  procs[currpid].epc = currpc;
+  memcpy(&procs[currpid].tf, currtf, sizeof(trap_frame_t));
+}
+void loadnextproc(uint32_t nextpid, trap_frame_t *currtf) {
+  memcpy(currtf, &procs[nextpid].tf, sizeof(trap_frame_t));
 }

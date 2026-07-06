@@ -9,9 +9,6 @@ current_time:
   csrr t0, timeh
   bne  a1, t0, 1b   # si timeh cambió mientras leíamos, repetir
   ret
-  #csrr a1, timeh
-  #csrr a0, time
-  #ret
 
 .globl timer
 timer:
@@ -19,7 +16,7 @@ timer:
   csrw sie, t0
   ret
 
-.globl return_next_task
-return_next_task:
+.globl uret
+uret:
   csrw sepc, a0
   ret
