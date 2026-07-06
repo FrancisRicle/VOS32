@@ -1,44 +1,48 @@
 #include "process.h"
 #include "mmu.h"
 #include "panic.h"
+#include <stdint.h>
 
 extern char __kernel_base[];
 
 process_t procs[PROCS_MAX];
-process_t *curr_proc;
+uint32_t currpid;
 
-void init_procs() {
+void pinit() {
+  currpid = -1;
   for (uint8_t i = 0; i < PROCS_MAX; i++) {
     procs[i].state = PROC_NULL;
-    procs[i].pid = i + 1;
-    procs[i].sepc = PROCS_BASE;
+    procs[i].pid = i;
+    procs[i].epc = PROCS_BASE;
   }
 }
+void user_entry(void);
 
-void create_process(uint32_t pc) {
-  uint8_t p = 0;
-  while (p < PROCS_MAX && procs[p].state != PROC_NULL) {
-    p++;
+void mapproc(uint32_t *pt, const void *image, uint32_t image_size) {
+  for (uint32_t page_offset = 0; page_offset < image_size;
+       page_offset += PAGE_SIZE) {
+    paddr_t upage = phypage();
+    uint32_t remaining = image_size - page_offset;
+    uint32_t copy_size = PAGE_SIZE <= remaining ? PAGE_SIZE : remaining;
+    memcpy((void *)upage, image + page_offset, copy_size);
+    mappage(pt, PROCS_BASE + page_offset, upage,
+            PAGE_U | PAGE_R | PAGE_W | PAGE_X);
   }
-  if (p > PROCS_MAX) {
+}
+void create_process(const void *image, uint32_t image_size) {
+  uint8_t pid = 0;
+  while (pid < PROCS_MAX && procs[pid].state != PROC_NULL) {
+    pid++;
+  }
+  if (pid >= PROCS_MAX) {
     panic("PROCS LIMIT");
   }
-  procs[p].sepc = pc;
-  procs[p].state = PROC_RUNNABLE;
-  memset(&procs[p].tf, 0x0, sizeof(trap_frame_t));
-  memset(&procs[p].stack, 0x0, sizeof(procs[p].stack));
-  procs[p].tf.sp = (uint32_t)(procs[p].stack + sizeof(procs[p].stack));
-  procs[p].tf.ra = pc;
-  procs[p].page_table = (uint32_t *)kpage();
-  map_mega(procs[p].page_table, 0x80000000, 0x80000000,
-           PAGE_R | PAGE_W | PAGE_X);
+  procs[pid].epc = (uint32_t)PROCS_BASE;
+  procs[pid].state = PROC_RUNNABLE;
+  memset(&procs[pid].tf, 0x0, sizeof(trap_frame_t));
+  procs[pid].tf.ra = (uint32_t)PROCS_BASE;
+  procs[pid].table1 = (uint32_t *)phypage();
+  kmap(procs[pid].table1);
+  mapproc(procs[pid].table1, image, image_size);
 }
-void run_procs() {
-  uint8_t p = 0;
-  while (p < PROCS_MAX && procs[p].state != PROC_RUNNABLE) {
-    p++;
-  }
-  curr_proc = &procs[p];
-  curr_proc->state = PROC_RUNNING;
-  exec(curr_proc->sepc, procs[p].tf.sp);
-}
+uint32_t *currtable1() { return procs[currpid].table1; }
