@@ -16,7 +16,6 @@ void pinit() {
     procs[i].epc = PROCS_BASE;
   }
 }
-void user_entry(void);
 
 void mapproc(uint32_t *pt, const void *image, uint32_t image_size) {
   for (uint32_t page_offset = 0; page_offset < image_size;
