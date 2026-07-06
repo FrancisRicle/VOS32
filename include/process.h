@@ -19,7 +19,6 @@ typedef struct {
 } process_t;
 
 void pinit(void);
-void uinit(void);
 void create_process(const void *image, uint32_t image_size);
 
 extern uint32_t currpid;
