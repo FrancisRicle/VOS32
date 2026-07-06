@@ -1,3 +1,4 @@
+#include "process.h"
 #include "traps.h"
 #define TIMER_FREQ_HZ 10000000UL
 //                     2000000UL  <- 500ms
@@ -10,6 +11,7 @@ uint64_t current_time(void);
 void timer(void);
 void schedule(void);
 void scheduler(void);
-void yield(uint32_t pc, trap_frame_t *tf);
-void return_next_task(uint32_t pc);
-void switch_context(trap_frame_t *curr_tf, trap_frame_t *next_tf);
+void uret(uint32_t pc);
+uint32_t nextproc(uint32_t exclude_pid);
+void savecurrproc(uint32_t pc, trap_frame_t *currtf);
+void loadnextproc(uint32_t nextpid, trap_frame_t *currtf);
