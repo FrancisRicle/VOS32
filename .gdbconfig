@@ -1,17 +1,26 @@
 define kernel_reload
-    make kernel-bin
+    make build/kernel
     directory .
-    file kernel-bin
+    file build/kernel
     monitor system_reset
     continue
     load
     continue
     echo \n--- Kernel cargado y PC reseteado ---\n
 end
-define pages
+define kernel_pages
   monitor info mem
 end
 define kernel_exit
   monitor quit
   quit
+end
+define kernel_status
+  set $SPIE = ($sstatus & 32)
+  set $SIE = ($sstatus & 2)
+  set $SUM = ($sstatus >> 18)
+  echo "\nInterrupts enable ="
+  eval "print $SPIE"
+  echo "\nPrior Interrupts enabled (sstatus.SPIE)\n"
+  echo "\nPrior  (sstatus.SPIE)\n"
 end
