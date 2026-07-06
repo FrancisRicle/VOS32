@@ -2,6 +2,7 @@
 .globl traps_entry 
 traps_entry:
   csrw sscratch, sp // guardamos temporalmente el stack pointer al momento de la excepcion
+  la sp, __stack_top // cargamos el stack del kernel
   addi sp, sp, -4 * 31 // guardamos espacio para el trap_frame
   sw ra,  4 * 0(sp)
   sw gp,  4 * 1(sp)
@@ -95,7 +96,11 @@ interrupts:
   csrsi sstatus, 2
   ret
 
-
+.globl uinterrupts
+uinterrupts:
+  li t0, 32
+  csrw sstatus, t0
+  ret
 
 .globl traps
 traps:
